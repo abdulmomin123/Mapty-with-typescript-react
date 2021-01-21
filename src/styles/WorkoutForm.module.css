@@ -1,0 +1,69 @@
+.Form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 2.5rem;
+  padding: 1.5rem 2.75rem;
+  margin-bottom: 1.75rem;
+  background-color: var(--color-dark--2);
+  border-radius: 5px;
+  transition: all 0.2s, transform 1ms;
+}
+
+.FormHidden {
+  transform: translateY(-30rem);
+  height: 0;
+  padding: 0 2.25rem;
+  margin-bottom: 0;
+  opacity: 0;
+}
+
+.FormRow {
+  display: flex;
+  align-items: center;
+}
+
+.FormRowHidden {
+  display: none;
+}
+
+.FormLabel {
+  flex: 0 0 50%;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.FormInput {
+  width: 100%;
+  padding: 0.3rem 1.1rem;
+  font-family: inherit;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 3px;
+  background-color: var(--color-light--3);
+  transition: all 0.2s;
+}
+
+.FormInput:focus {
+  outline: none;
+  background-color: #fff;
+}
+
+.FormBtn {
+  font-size: 1.7rem;
+  width: 100%;
+  padding: 0.7rem 2rem;
+  color: #fff;
+  background: var(--color-dark--1);
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: 2rem;
+  border: none;
+  border-radius: 1rem;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.FormBtn:hover {
+  background: var(--color-light--4);
+}

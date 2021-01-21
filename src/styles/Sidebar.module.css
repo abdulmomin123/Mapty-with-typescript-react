@@ -1,5 +1,20 @@
 .Sidebar {
   flex-basis: 50rem;
+  display: flex;
+  flex-direction: column;
   background-color: var(--color-dark--1);
   padding: 3rem 5rem 4rem 5rem;
+}
+
+.Logo {
+  height: 5.2rem;
+  align-self: center;
+  margin-bottom: 4rem;
+}
+
+.Copyright {
+  margin-top: auto;
+  font-size: 1.3rem;
+  text-align: center;
+  color: var(--color-light--1);
 }

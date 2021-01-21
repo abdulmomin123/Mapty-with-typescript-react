@@ -9,10 +9,12 @@ import Sidebar from './Sidebar';
 const App = () => {
   // Workouts
   // @ts-ignore
-  const [workouts, setWorkouts] = useState<Types.Workouts | []>([]);
+  const [workouts, setWorkouts] = useState<Types.Workouts>();
+
+  // Currently clicked position on the map
+  const [workoutCoords, setWorkoutCoords] = useState<LatLngLiteral>();
 
   // Form toggler
-  // @ts-ignore
   const [isFormShowing, toggleForm] = useToggle(false);
 
   // Users coords
@@ -34,14 +36,19 @@ const App = () => {
   return (
     <div className={styles.App}>
       {/* The sidear section */}
-      <Sidebar workouts={workouts} />
+      <Sidebar
+        workoutCoords={workoutCoords!}
+        isFormShowing={isFormShowing}
+        workouts={workouts!}
+      />
 
       {/* The map section */}
       {userPosition && (
         <Map
-          workouts={workouts}
-          toggleForm={toggleForm}
           userPosition={userPosition}
+          workouts={workouts!}
+          toggleForm={toggleForm}
+          setWorkoutCoords={setWorkoutCoords}
         />
       )}
     </div>

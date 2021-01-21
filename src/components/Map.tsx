@@ -12,16 +12,22 @@ import styles from '../styles/Map.module.css';
 
 interface Props {
   userPosition: LatLngLiteral;
-  workouts: Types.Workouts | [];
+  workouts: Types.Workouts;
   toggleForm: () => void;
+  setWorkoutCoords: (coords: LatLngLiteral) => void;
 }
 
-const Map: React.FC<Props> = ({ userPosition, toggleForm }) => {
+const Map: React.FC<Props> = ({
+  userPosition,
+  toggleForm,
+  setWorkoutCoords,
+}) => {
   // Just the click handler on the map
   const HandleClick = () => {
     useMapEvents({
-      click() {
+      click({ latlng: { lat, lng } }) {
         toggleForm();
+        setWorkoutCoords({ lat, lng });
       },
     });
 
