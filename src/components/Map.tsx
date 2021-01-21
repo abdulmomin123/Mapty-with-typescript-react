@@ -19,6 +19,7 @@ interface Props {
 
 const Map: React.FC<Props> = ({
   userPosition,
+  workouts,
   toggleForm,
   setWorkoutCoords,
 }) => {
@@ -43,6 +44,19 @@ const Map: React.FC<Props> = ({
       <Marker position={userPosition}>
         <Popup>You are here.</Popup>
       </Marker>
+
+      {/* Workout markers */}
+      {workouts.map(workout => (
+        <Marker key={workout.id} position={workout.coords}>
+          <Popup
+            className={`${
+              workout.type === 'running' ? 'running' : 'cycling'
+            }-popup`}
+          >
+            {`${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.title}`}
+          </Popup>
+        </Marker>
+      ))}
 
       {/* Click handler (doesn't return any element) */}
       <HandleClick />

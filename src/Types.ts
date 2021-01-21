@@ -1,7 +1,5 @@
 import { LatLngLiteral } from 'leaflet';
 
-export type Coords = [number, number];
-
 interface Workout {
   id: string;
   title: string;
@@ -12,12 +10,16 @@ interface Workout {
 
 export interface Running extends Workout {
   type: 'running';
+  emoji: '🏃‍♂️';
   cadence: number;
 }
 
 export interface Cycling extends Workout {
   type: 'cycling';
+  emoji: '🚴‍♀️';
   elevationGain: number;
 }
 
-export type Workouts = [Running, Cycling];
+export type Workouts = (Running | Cycling)[];
+
+export type WorkoutType = 'running' | 'cycling';

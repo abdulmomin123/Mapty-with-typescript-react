@@ -1,0 +1,9 @@
+.workoutList {
+  list-style: none;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.workoutList::-webkit-scrollbar {
+  width: 0;
+}

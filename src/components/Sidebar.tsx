@@ -10,17 +10,27 @@ interface Props {
   workouts: Types.Workouts;
   isFormShowing: boolean;
   workoutCoords: LatLngLiteral;
+  addWorkout: (workout: Types.Running | Types.Cycling) => void;
+  toggleForm: () => void;
 }
 
-const Sidebar: React.FC<Props> = ({ isFormShowing }) => {
+const Sidebar: React.FC<Props> = ({
+  isFormShowing,
+  workoutCoords,
+  workouts,
+  addWorkout,
+  toggleForm,
+}) => {
   return (
     <div className={styles.Sidebar}>
       <img src={logo} alt="Mapty Logo" className={styles.Logo} />
-
-      <WorkoutList />
-
-      <WorkoutForm isFormShowing={isFormShowing} />
-
+      <WorkoutList workouts={workouts} />
+      <WorkoutForm
+        isFormShowing={isFormShowing}
+        workoutCoords={workoutCoords}
+        addWorkout={addWorkout}
+        toggleForm={toggleForm}
+      />
       <p className={styles.Copyright}>© Copyright by Abdul Momin</p>
     </div>
   );

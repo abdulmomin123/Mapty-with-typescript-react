@@ -8,8 +8,7 @@ import Sidebar from './Sidebar';
 
 const App = () => {
   // Workouts
-  // @ts-ignore
-  const [workouts, setWorkouts] = useState<Types.Workouts>();
+  const [workouts, setWorkouts] = useState<Types.Workouts>([]);
 
   // Currently clicked position on the map
   const [workoutCoords, setWorkoutCoords] = useState<LatLngLiteral>();
@@ -33,6 +32,10 @@ const App = () => {
     );
   }, []);
 
+  // Add a workout
+  const addWorkout = (workout: Types.Running | Types.Cycling) =>
+    setWorkouts([...workouts, workout]);
+
   return (
     <div className={styles.App}>
       {/* The sidear section */}
@@ -40,6 +43,8 @@ const App = () => {
         workoutCoords={workoutCoords!}
         isFormShowing={isFormShowing}
         workouts={workouts!}
+        addWorkout={addWorkout}
+        toggleForm={toggleForm}
       />
 
       {/* The map section */}
