@@ -1,11 +1,12 @@
 import { LatLngLiteral } from 'leaflet';
 
-interface Workout {
+export interface Workout {
   id: string;
   title: string;
   coords: LatLngLiteral;
   distance: number;
   duration: number;
+  isEditing: boolean;
 }
 
 export interface Running extends Workout {

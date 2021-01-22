@@ -38,12 +38,14 @@ const Sidebar: React.FC<Props> = ({
         </button>
       ) : null}
 
-      <WorkoutForm
-        isFormShowing={isFormShowing}
-        workoutCoords={workoutCoords}
-        addWorkout={addWorkout}
-        toggleForm={toggleForm}
-      />
+      {isFormShowing && (
+        <WorkoutForm
+          workoutCoords={workoutCoords}
+          addWorkout={addWorkout}
+          toggleForm={toggleForm}
+        />
+      )}
+
       <WorkoutList
         removeWorkout={removeWorkout}
         changeMapCenter={changeMapCenter}

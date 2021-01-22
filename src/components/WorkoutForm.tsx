@@ -21,14 +21,12 @@ const months = [
 ];
 
 interface Props {
-  isFormShowing: boolean;
   workoutCoords: LatLngLiteral;
   addWorkout: (workout: Types.Running | Types.Cycling) => void;
   toggleForm: () => void;
 }
 
 const WorkoutForm: React.FC<Props> = ({
-  isFormShowing,
   workoutCoords,
   addWorkout,
   toggleForm,
@@ -61,30 +59,33 @@ const WorkoutForm: React.FC<Props> = ({
       workoutType[0].toUpperCase() + workoutType.slice(1)
     } on ${month} ${day}`;
 
-    const workout = {
+    const workout: Types.Workout = {
       id: uuid(),
       title,
       coords: workoutCoords,
       distance: +distance,
       duration: +duration,
+      isEditing: false,
     };
 
     if (workoutType === 'running') {
-      addWorkout({
+      const runningWorkout: Types.Running = {
         ...workout,
         type: 'running',
         emoji: '🏃‍♂️',
         cadence: +cadence,
-      } as Types.Running);
+      };
+      addWorkout(runningWorkout);
     }
 
     if (workoutType === 'cycling') {
-      addWorkout({
+      const cyclingWorkout: Types.Cycling = {
         ...workout,
         type: 'cycling',
         emoji: '🚴‍♀️',
         elevationGain: +elevGain,
-      } as Types.Cycling);
+      };
+      addWorkout(cyclingWorkout);
     }
 
     // Resetting all the values
@@ -99,10 +100,7 @@ const WorkoutForm: React.FC<Props> = ({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={isFormShowing ? styles.Form : styles.FormHidden}
-    >
+    <form onSubmit={handleSubmit} className={styles.Form}>
       <div className={styles.FormRow}>
         <label className={styles.FormLabel}>Type</label>
         <select
