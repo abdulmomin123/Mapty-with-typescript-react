@@ -17,7 +17,10 @@ const App = () => {
   const [isFormShowing, toggleForm] = useToggle(false);
 
   // Users coords
-  const [userPosition, setCoords] = useState<LatLngLiteral>();
+  const [userPosition, setUserPosition] = useState<LatLngLiteral>();
+
+  // The current center view of the map
+  const [mapCenter, setMapCenter] = useState<LatLngLiteral>();
 
   // Getting users coords
   useEffect(() => {
@@ -26,15 +29,24 @@ const App = () => {
     if (!geolocation) return;
 
     geolocation.getCurrentPosition(
-      ({ coords: { latitude: lat, longitude: lng } }) =>
-        setCoords({ lat, lng }),
+      ({ coords: { latitude: lat, longitude: lng } }) => {
+        setUserPosition({ lat, lng });
+        setMapCenter({ lat, lng });
+      },
       () => alert('Could not get your location :(')
     );
   }, []);
 
   // Add a workout
   const addWorkout = (workout: Types.Running | Types.Cycling) =>
-    setWorkouts([...workouts, workout]);
+    setWorkouts([workout, ...workouts]);
+
+  const removeWorkout = (id: string) =>
+    setWorkouts(workouts.filter(workout => workout.id !== id));
+
+  const removeAllWorkouts = () => setWorkouts([]);
+
+  const changeMapCenter = (newCenter: LatLngLiteral) => setMapCenter(newCenter);
 
   return (
     <div className={styles.App}>
@@ -45,15 +57,20 @@ const App = () => {
         workouts={workouts!}
         addWorkout={addWorkout}
         toggleForm={toggleForm}
+        changeMapCenter={changeMapCenter}
+        removeWorkout={removeWorkout}
+        removeAllWorkouts={removeAllWorkouts}
       />
 
       {/* The map section */}
-      {userPosition && (
+      {userPosition && mapCenter && (
         <Map
           userPosition={userPosition}
+          mapCenter={mapCenter}
           workouts={workouts!}
           toggleForm={toggleForm}
           setWorkoutCoords={setWorkoutCoords}
+          changeMapCenter={changeMapCenter}
         />
       )}
     </div>

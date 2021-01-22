@@ -2,6 +2,7 @@
   flex-basis: 50rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   background-color: var(--color-dark--1);
   padding: 3rem 5rem 4rem 5rem;
 }
@@ -17,4 +18,22 @@
   font-size: 1.3rem;
   text-align: center;
   color: var(--color-light--1);
+}
+
+.DeleteAll {
+  font-size: 1.6rem;
+  color: #fff;
+  background: rgb(146, 35, 35);
+  align-self: flex-end;
+  padding: 0.7rem 1.8rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.DeleteAll:hover {
+  filter: brightness(120%);
 }

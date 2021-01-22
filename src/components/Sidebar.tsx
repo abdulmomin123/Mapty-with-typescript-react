@@ -12,6 +12,9 @@ interface Props {
   workoutCoords: LatLngLiteral;
   addWorkout: (workout: Types.Running | Types.Cycling) => void;
   toggleForm: () => void;
+  changeMapCenter: (newCenter: LatLngLiteral) => void;
+  removeWorkout: (id: string) => void;
+  removeAllWorkouts: () => void;
 }
 
 const Sidebar: React.FC<Props> = ({
@@ -20,16 +23,31 @@ const Sidebar: React.FC<Props> = ({
   workouts,
   addWorkout,
   toggleForm,
+  changeMapCenter,
+  removeWorkout,
+  removeAllWorkouts,
 }) => {
   return (
     <div className={styles.Sidebar}>
       <img src={logo} alt="Mapty Logo" className={styles.Logo} />
-      <WorkoutList workouts={workouts} />
+
+      {/* Delete all btn */}
+      {workouts.length ? (
+        <button onClick={removeAllWorkouts} className={styles.DeleteAll}>
+          Delete All Workouts
+        </button>
+      ) : null}
+
       <WorkoutForm
         isFormShowing={isFormShowing}
         workoutCoords={workoutCoords}
         addWorkout={addWorkout}
         toggleForm={toggleForm}
+      />
+      <WorkoutList
+        removeWorkout={removeWorkout}
+        changeMapCenter={changeMapCenter}
+        workouts={workouts}
       />
       <p className={styles.Copyright}>© Copyright by Abdul Momin</p>
     </div>

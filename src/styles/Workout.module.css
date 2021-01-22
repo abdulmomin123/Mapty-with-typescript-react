@@ -38,3 +38,33 @@
   font-size: 1.5rem;
   margin-right: 0.5rem;
 }
+
+.actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem;
+}
+
+.btn {
+  font-size: 1.4rem;
+  color: #fff;
+  padding: 0.5rem 6rem;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.btn:hover {
+  filter: brightness(130%);
+}
+
+.edit {
+  background: rgb(50, 110, 110);
+}
+
+.delete {
+  background: rgb(141, 28, 28);
+}
