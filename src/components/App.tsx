@@ -22,6 +22,9 @@ const App = () => {
   // The current center view of the map
   const [mapCenter, setMapCenter] = useState<LatLngLiteral>();
 
+  // If the user has clicked on a workout
+  const [isWorkoutClicked, setWorkoutClicked] = useState(false);
+
   // Getting users coords
   useEffect(() => {
     const { geolocation } = navigator;
@@ -60,6 +63,7 @@ const App = () => {
         changeMapCenter={changeMapCenter}
         removeWorkout={removeWorkout}
         removeAllWorkouts={removeAllWorkouts}
+        setWorkoutClicked={setWorkoutClicked}
       />
 
       {/* The map section */}
@@ -68,9 +72,11 @@ const App = () => {
           userPosition={userPosition}
           mapCenter={mapCenter}
           workouts={workouts!}
+          isWorkoutClicked={isWorkoutClicked}
           toggleForm={toggleForm}
           setWorkoutCoords={setWorkoutCoords}
           changeMapCenter={changeMapCenter}
+          setWorkoutClicked={setWorkoutClicked}
         />
       )}
     </div>

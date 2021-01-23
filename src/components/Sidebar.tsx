@@ -15,6 +15,7 @@ interface Props {
   changeMapCenter: (newCenter: LatLngLiteral) => void;
   removeWorkout: (id: string) => void;
   removeAllWorkouts: () => void;
+  setWorkoutClicked: (state: boolean) => void;
 }
 
 const Sidebar: React.FC<Props> = ({
@@ -26,6 +27,7 @@ const Sidebar: React.FC<Props> = ({
   changeMapCenter,
   removeWorkout,
   removeAllWorkouts,
+  setWorkoutClicked,
 }) => {
   return (
     <div className={styles.Sidebar}>
@@ -47,9 +49,10 @@ const Sidebar: React.FC<Props> = ({
       )}
 
       <WorkoutList
+        workouts={workouts}
         removeWorkout={removeWorkout}
         changeMapCenter={changeMapCenter}
-        workouts={workouts}
+        setWorkoutClicked={setWorkoutClicked}
       />
       <p className={styles.Copyright}>© Copyright by Abdul Momin</p>
     </div>

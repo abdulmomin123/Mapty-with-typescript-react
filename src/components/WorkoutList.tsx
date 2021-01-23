@@ -8,12 +8,14 @@ interface Props {
   workouts: Types.Workouts;
   changeMapCenter: (newCenter: LatLngLiteral) => void;
   removeWorkout: (id: string) => void;
+  setWorkoutClicked: (state: boolean) => void;
 }
 
 const WorkoutList: React.FC<Props> = ({
   workouts,
   changeMapCenter,
   removeWorkout,
+  setWorkoutClicked,
 }) => {
   return (
     <ul className={styles.workoutList}>
@@ -23,6 +25,7 @@ const WorkoutList: React.FC<Props> = ({
           workout={workout}
           changeMapCenter={changeMapCenter}
           removeWorkout={removeWorkout}
+          setWorkoutClicked={setWorkoutClicked}
         />
       ))}
     </ul>

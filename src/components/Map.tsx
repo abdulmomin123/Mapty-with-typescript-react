@@ -15,23 +15,28 @@ interface Props {
   userPosition: LatLngLiteral;
   mapCenter: LatLngLiteral;
   workouts: Types.Workouts;
+  zoomLevel?: number;
+  isWorkoutClicked: boolean;
   toggleForm: () => void;
   setWorkoutCoords: (coords: LatLngLiteral) => void;
   changeMapCenter: (newCenter: LatLngLiteral) => void;
+  setWorkoutClicked: (state: boolean) => void;
 }
 
 const Map: React.FC<Props> = ({
   userPosition,
   mapCenter,
   workouts,
+  zoomLevel = 13,
+  isWorkoutClicked,
   toggleForm,
   setWorkoutCoords,
   changeMapCenter,
+  setWorkoutClicked,
 }) => {
   // Just the click handler on the map
   const HandleClick = () => {
     const map = useMap();
-    map.flyTo(mapCenter);
 
     useMapEvents({
       click({ latlng: { lat, lng } }) {
@@ -42,13 +47,25 @@ const Map: React.FC<Props> = ({
         const { lat, lng } = map.getCenter();
         changeMapCenter({ lat, lng });
       },
+      moveend() {
+        if (!isWorkoutClicked) return;
+
+        setWorkoutClicked(false);
+      },
     });
 
     return <></>;
   };
 
+  const MoveToMarker = () => {
+    const map = useMap();
+    map.flyTo(mapCenter, zoomLevel);
+
+    return <></>;
+  };
+
   return (
-    <MapContainer className={styles.Map} center={mapCenter} zoom={13}>
+    <MapContainer className={styles.Map} center={mapCenter} zoom={zoomLevel}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -72,6 +89,9 @@ const Map: React.FC<Props> = ({
 
       {/* Click handler (doesn't return any element) */}
       <HandleClick />
+
+      {/* Moves the map to clicked workout position */}
+      {isWorkoutClicked ? <MoveToMarker /> : null}
     </MapContainer>
   );
 };

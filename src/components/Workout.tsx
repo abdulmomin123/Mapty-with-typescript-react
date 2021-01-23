@@ -7,16 +7,21 @@ interface Props {
   workout: Types.Running | Types.Cycling;
   changeMapCenter: (newCenter: LatLngLiteral) => void;
   removeWorkout: (id: string) => void;
+  setWorkoutClicked: (state: boolean) => void;
 }
 
 const Workout: React.FC<Props> = ({
   workout,
   changeMapCenter,
   removeWorkout,
+  setWorkoutClicked,
 }) => {
   return (
     <li
-      onClick={() => changeMapCenter(workout.coords)}
+      onClick={() => {
+        changeMapCenter(workout.coords);
+        setWorkoutClicked(true);
+      }}
       className={`${styles.workout} ${
         workout.type === 'running' ? styles.running : styles.cycling
       }`}
