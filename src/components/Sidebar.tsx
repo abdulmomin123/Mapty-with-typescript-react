@@ -16,6 +16,8 @@ interface Props {
   removeWorkout: (id: string) => void;
   removeAllWorkouts: () => void;
   setWorkoutClicked: (state: boolean) => void;
+  editWorkout: (id: string) => void;
+  updateWorkout: (update: Types.Running | Types.Cycling) => void;
 }
 
 const Sidebar: React.FC<Props> = ({
@@ -28,6 +30,8 @@ const Sidebar: React.FC<Props> = ({
   removeWorkout,
   removeAllWorkouts,
   setWorkoutClicked,
+  editWorkout,
+  updateWorkout,
 }) => {
   return (
     <div className={styles.Sidebar}>
@@ -53,6 +57,8 @@ const Sidebar: React.FC<Props> = ({
         removeWorkout={removeWorkout}
         changeMapCenter={changeMapCenter}
         setWorkoutClicked={setWorkoutClicked}
+        editWorkout={editWorkout}
+        updateWorkout={updateWorkout}
       />
       <p className={styles.Copyright}>© Copyright by Abdul Momin</p>
     </div>

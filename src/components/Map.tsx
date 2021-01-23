@@ -75,14 +75,12 @@ const Map: React.FC<Props> = ({
       </Marker>
 
       {/* Workout markers */}
-      {workouts.map(workout => (
-        <Marker key={workout.id} position={workout.coords}>
+      {workouts.map(({ id, title, coords, type }) => (
+        <Marker key={id} position={coords}>
           <Popup
-            className={`${
-              workout.type === 'running' ? 'running' : 'cycling'
-            }-popup`}
+            className={`${type === 'running' ? 'running' : 'cycling'}-popup`}
           >
-            {`${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.title}`}
+            {`${type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${title}`}
           </Popup>
         </Marker>
       ))}

@@ -1,13 +1,14 @@
 import React from 'react';
+import { LatLngLiteral } from 'leaflet';
 import * as Types from '../Types';
 import styles from '../styles/Workout.module.css';
-import { LatLngLiteral } from 'leaflet';
 
 interface Props {
   workout: Types.Running | Types.Cycling;
   changeMapCenter: (newCenter: LatLngLiteral) => void;
   removeWorkout: (id: string) => void;
   setWorkoutClicked: (state: boolean) => void;
+  editWorkout: (id: string) => void;
 }
 
 const Workout: React.FC<Props> = ({
@@ -15,42 +16,47 @@ const Workout: React.FC<Props> = ({
   changeMapCenter,
   removeWorkout,
   setWorkoutClicked,
+  editWorkout,
 }) => {
+  const { id, coords, type, title, distance, duration, emoji } = workout;
+  const { cadence } = workout as Types.Running;
+  const { elevationGain } = workout as Types.Cycling;
+
   return (
     <li
       onClick={() => {
-        changeMapCenter(workout.coords);
+        changeMapCenter(coords);
         setWorkoutClicked(true);
       }}
       className={`${styles.workout} ${
-        workout.type === 'running' ? styles.running : styles.cycling
+        type === 'running' ? styles.running : styles.cycling
       }`}
     >
-      <h2 className={styles.title}>{workout.title}</h2>
+      <h2 className={styles.title}>{title}</h2>
       <div className={styles.details}>
-        <span className={styles.icon}>{workout.emoji}</span>
-        <span className={styles.value}>{workout.distance}</span>
+        <span className={styles.icon}>{emoji}</span>
+        <span className={styles.value}>{distance}</span>
         <span className={styles.unit}>KM</span>
       </div>
       <div className={styles.details}>
         <span className={styles.icon}>⏱</span>
-        <span className={styles.value}>{workout.duration}</span>
+        <span className={styles.value}>{duration}</span>
         <span className={styles.unit}>MIN</span>
       </div>
 
-      {workout.type === 'running' ? (
+      {type === 'running' ? (
         <>
           <div className={styles.details}>
             <span className={styles.icon}>⚡️</span>
             <span className={styles.value}>
-              {(workout.distance / workout.duration).toFixed(1)}
+              {(distance / duration).toFixed(1)}
             </span>
             <span className={styles.unit}>MIN/KM</span>
           </div>
 
           <div className={styles.details}>
             <span className={styles.icon}>🦶🏼</span>
-            <span className={styles.value}>{workout.cadence}</span>
+            <span className={styles.value}>{cadence}</span>
             <span className={styles.unit}>SPM</span>
           </div>
         </>
@@ -59,14 +65,14 @@ const Workout: React.FC<Props> = ({
           <div className={styles.details}>
             <span className={styles.icon}>⚡️</span>
             <span className={styles.value}>
-              {(workout.distance / (workout.duration / 60)).toFixed(1)}
+              {(distance / (duration / 60)).toFixed(1)}
             </span>
             <span className={styles.unit}>KM/H</span>
           </div>
 
           <div className={styles.details}>
             <span className={styles.icon}>⛰</span>
-            <span className={styles.value}>{workout.elevationGain}</span>
+            <span className={styles.value}>{elevationGain}</span>
             <span className={styles.unit}>M</span>
           </div>
         </>
@@ -74,9 +80,14 @@ const Workout: React.FC<Props> = ({
 
       {/* Edit and delete button */}
       <div className={styles.actions}>
-        <button className={`${styles.btn} ${styles.edit}`}>Edit</button>
         <button
-          onClick={() => removeWorkout(workout.id)}
+          onClick={() => editWorkout(id)}
+          className={`${styles.btn} ${styles.edit}`}
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => removeWorkout(id)}
           className={`${styles.btn} ${styles.delete}`}
         >
           Delete

@@ -1,36 +1,37 @@
 import React, { useState } from 'react';
-import { v4 as uuid } from 'uuid';
-import { LatLngLiteral } from 'leaflet';
 import * as Types from '../Types';
 import styles from '../styles/WorkoutForms.module.css';
 import useInput from '../hooks/useInput';
 import months from '../months';
 
 interface Props {
-  workoutCoords: LatLngLiteral;
-  addWorkout: (workout: Types.Running | Types.Cycling) => void;
-  toggleForm: () => void;
+  workout: Types.Running | Types.Cycling;
+  updateWorkout: (update: Types.Running | Types.Cycling) => void;
 }
 
-const WorkoutForm: React.FC<Props> = ({
-  workoutCoords,
-  addWorkout,
-  toggleForm,
-}) => {
+const WorkoutEditForm: React.FC<Props> = ({ workout, updateWorkout }) => {
+  const { id, coords } = workout;
+
   // Workout type
-  const [workoutType, setworkoutType] = useState<Types.WorkoutType>('running');
+  const [workoutType, setworkoutType] = useState<Types.WorkoutType>(
+    workout.type
+  );
 
   // Distance
-  const [distance, setDistance] = useInput('');
+  const [distance, setDistance] = useInput(`${workout.distance}`);
 
   // Duration
-  const [duration, setDuration] = useInput('');
+  const [duration, setDuration] = useInput(`${workout.duration}`);
 
   // Cadence
-  const [cadence, setCadence] = useInput('');
+  const [cadence, setCadence] = useInput(
+    `${(workout as Types.Running).cadence}`
+  );
 
   // Elevation Gain
-  const [elevGain, setElevGain] = useInput('');
+  const [elevGain, setElevGain] = useInput(
+    `${(workout as Types.Cycling).elevationGain}`
+  );
 
   const handleTypeChange = (e: React.ChangeEvent) =>
     setworkoutType((e.target as HTMLInputElement).value as Types.WorkoutType);
@@ -45,10 +46,10 @@ const WorkoutForm: React.FC<Props> = ({
       workoutType[0].toUpperCase() + workoutType.slice(1)
     } on ${month} ${day}`;
 
-    const workout: Types.Workout = {
-      id: uuid(),
+    const update: Types.Workout = {
+      id,
       title,
-      coords: workoutCoords,
+      coords,
       distance: +distance,
       duration: +duration,
       isEditing: false,
@@ -56,26 +57,27 @@ const WorkoutForm: React.FC<Props> = ({
 
     if (workoutType === 'running') {
       const runningWorkout: Types.Running = {
-        ...workout,
+        ...update,
         type: 'running',
         emoji: '🏃‍♂️',
         cadence: +cadence,
       };
-      addWorkout(runningWorkout);
+
+      // updating the workout
+      updateWorkout(runningWorkout);
     }
 
     if (workoutType === 'cycling') {
       const cyclingWorkout: Types.Cycling = {
-        ...workout,
+        ...update,
         type: 'cycling',
         emoji: '🚴‍♀️',
         elevationGain: +elevGain,
       };
-      addWorkout(cyclingWorkout);
-    }
 
-    // Hiding the form
-    toggleForm();
+      // updating the workout
+      updateWorkout(cyclingWorkout);
+    }
   };
 
   return (
@@ -146,11 +148,11 @@ const WorkoutForm: React.FC<Props> = ({
         </div>
       ) : null}
 
-      <button className={`${styles.FormBtn} ${styles.AddBtn}`} type="submit">
-        Add
+      <button className={`${styles.FormBtn} ${styles.SaveBtn}`} type="submit">
+        Save
       </button>
     </form>
   );
 };
 
-export default WorkoutForm;
+export default WorkoutEditForm;

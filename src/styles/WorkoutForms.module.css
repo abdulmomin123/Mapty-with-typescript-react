@@ -39,8 +39,6 @@
   font-size: 1.7rem;
   width: 100%;
   padding: 0.7rem 2rem;
-  color: #fff;
-  background: var(--color-dark--1);
   grid-column: 1 / -1;
   justify-self: center;
   margin-top: 2rem;
@@ -51,6 +49,20 @@
   transition: background 0.2s;
 }
 
-.FormBtn:hover {
+.AddBtn {
+  color: #fff;
+  background: var(--color-dark--1);
+}
+
+.AddBtn:hover {
   background: var(--color-light--4);
+}
+
+.SaveBtn {
+  color: #fff;
+  background: rgb(0, 110, 110);
+}
+
+.SaveBtn:hover {
+  background: rgb(0, 160, 160);
 }
