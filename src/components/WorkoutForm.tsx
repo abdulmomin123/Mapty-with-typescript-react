@@ -1,36 +1,36 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { LatLngLiteral } from 'leaflet';
+import { WorkoutsContext } from '../contexts/Workouts.context';
+import useInput from '../hooks/useInput';
+import { FromShowingContext } from '../contexts/FormShowing.context';
 import * as Types from '../Types';
 import styles from '../styles/WorkoutForms.module.css';
-import useInput from '../hooks/useInput';
 import months from '../months';
 
 interface Props {
   workoutCoords: LatLngLiteral;
-  addWorkout: (workout: Types.Running | Types.Cycling) => void;
-  toggleForm: () => void;
 }
 
-const WorkoutForm: React.FC<Props> = ({
-  workoutCoords,
-  addWorkout,
-  toggleForm,
-}) => {
+const WorkoutForm: React.FC<Props> = ({ workoutCoords }) => {
+  // Consuming contexts
+  const { isFormShowing, toggleForm } = useContext(FromShowingContext);
+  const { dispatch } = useContext(WorkoutsContext);
+
   // Workout type
   const [workoutType, setworkoutType] = useState<Types.WorkoutType>('running');
 
   // Distance
-  const [distance, setDistance] = useInput('');
+  const [distance, setDistance, resetDistance] = useInput('');
 
   // Duration
-  const [duration, setDuration] = useInput('');
+  const [duration, setDuration, resetDuration] = useInput('');
 
   // Cadence
-  const [cadence, setCadence] = useInput('');
+  const [cadence, setCadence, resetCadence] = useInput('');
 
   // Elevation Gain
-  const [elevGain, setElevGain] = useInput('');
+  const [elevGain, setElevGain, resetElevGain] = useInput('');
 
   const handleTypeChange = (e: React.ChangeEvent) =>
     setworkoutType((e.target as HTMLInputElement).value as Types.WorkoutType);
@@ -61,7 +61,7 @@ const WorkoutForm: React.FC<Props> = ({
         emoji: '🏃‍♂️',
         cadence: +cadence,
       };
-      addWorkout(runningWorkout);
+      dispatch!({ type: 'ADD', workout: runningWorkout });
     }
 
     if (workoutType === 'cycling') {
@@ -71,14 +71,21 @@ const WorkoutForm: React.FC<Props> = ({
         emoji: '🚴‍♀️',
         elevationGain: +elevGain,
       };
-      addWorkout(cyclingWorkout);
+      dispatch!({ type: 'ADD', workout: cyclingWorkout });
     }
 
     // Hiding the form
-    toggleForm();
+    toggleForm!();
+
+    // Resetting all the inputs
+    setworkoutType('running');
+    resetDistance();
+    resetDuration();
+    resetCadence();
+    resetElevGain();
   };
 
-  return (
+  return isFormShowing ? (
     <form onSubmit={handleSubmit} className={styles.Form}>
       <div className={styles.FormRow}>
         <label className={styles.FormLabel}>Type</label>
@@ -150,7 +157,7 @@ const WorkoutForm: React.FC<Props> = ({
         Add
       </button>
     </form>
-  );
+  ) : null;
 };
 
 export default WorkoutForm;

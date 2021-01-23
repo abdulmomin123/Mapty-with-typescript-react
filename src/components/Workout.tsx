@@ -1,23 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { LatLngLiteral } from 'leaflet';
+import { WorkoutsContext } from '../contexts/Workouts.context';
 import * as Types from '../Types';
 import styles from '../styles/Workout.module.css';
 
 interface Props {
   workout: Types.Running | Types.Cycling;
   changeMapCenter: (newCenter: LatLngLiteral) => void;
-  removeWorkout: (id: string) => void;
   setWorkoutClicked: (state: boolean) => void;
-  editWorkout: (id: string) => void;
 }
 
 const Workout: React.FC<Props> = ({
   workout,
   changeMapCenter,
-  removeWorkout,
   setWorkoutClicked,
-  editWorkout,
 }) => {
+  // Consuming contexts
+  const { dispatch } = useContext(WorkoutsContext);
+
   const { id, coords, type, title, distance, duration, emoji } = workout;
   const { cadence } = workout as Types.Running;
   const { elevationGain } = workout as Types.Cycling;
@@ -81,13 +81,13 @@ const Workout: React.FC<Props> = ({
       {/* Edit and delete button */}
       <div className={styles.actions}>
         <button
-          onClick={() => editWorkout(id)}
+          onClick={() => dispatch!({ type: 'EDIT', id })}
           className={`${styles.btn} ${styles.edit}`}
         >
           Edit
         </button>
         <button
-          onClick={() => removeWorkout(id)}
+          onClick={() => dispatch!({ type: 'REMOVE', id })}
           className={`${styles.btn} ${styles.delete}`}
         >
           Delete

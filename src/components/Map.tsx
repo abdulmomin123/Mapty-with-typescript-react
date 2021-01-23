@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, memo } from 'react';
 import { LatLngLiteral } from 'leaflet';
 import {
   MapContainer,
@@ -8,16 +8,15 @@ import {
   useMapEvents,
   useMap,
 } from 'react-leaflet';
-import * as Types from '../Types';
+import { FromShowingContext } from '../contexts/FormShowing.context';
+import { WorkoutsContext } from '../contexts/Workouts.context';
 import styles from '../styles/Map.module.css';
 
 interface Props {
   userPosition: LatLngLiteral;
   mapCenter: LatLngLiteral;
-  workouts: Types.Workouts;
   zoomLevel?: number;
   isWorkoutClicked: boolean;
-  toggleForm: () => void;
   setWorkoutCoords: (coords: LatLngLiteral) => void;
   changeMapCenter: (newCenter: LatLngLiteral) => void;
   setWorkoutClicked: (state: boolean) => void;
@@ -26,23 +25,27 @@ interface Props {
 const Map: React.FC<Props> = ({
   userPosition,
   mapCenter,
-  workouts,
   zoomLevel = 13,
   isWorkoutClicked,
-  toggleForm,
   setWorkoutCoords,
   changeMapCenter,
   setWorkoutClicked,
 }) => {
+  // Consuming contexts
+  const { toggleForm } = useContext(FromShowingContext);
+  const { workouts } = useContext(WorkoutsContext);
+
   // Just the click handler on the map
   const HandleClick = () => {
     const map = useMap();
 
     useMapEvents({
+      // Toggling the form on click
       click({ latlng: { lat, lng } }) {
-        toggleForm();
+        toggleForm!();
         setWorkoutCoords({ lat, lng });
       },
+      // Updating the mapCenter
       dragend() {
         const { lat, lng } = map.getCenter();
         changeMapCenter({ lat, lng });
@@ -75,7 +78,7 @@ const Map: React.FC<Props> = ({
       </Marker>
 
       {/* Workout markers */}
-      {workouts.map(({ id, title, coords, type }) => (
+      {workouts!.map(({ id, title, coords, type }) => (
         <Marker key={id} position={coords}>
           <Popup
             className={`${type === 'running' ? 'running' : 'cycling'}-popup`}
@@ -94,4 +97,4 @@ const Map: React.FC<Props> = ({
   );
 };
 
-export default Map;
+export default memo(Map);

@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import * as Types from '../Types';
 
 const useLocalStorage = (
   key: string,
-  initialValue: Types.Workouts = []
-): [Types.Workouts, (workout: Types.Workouts) => void] => {
-  const [state, setState] = useState<Types.Workouts>(
+  initialValue: Types.Workouts = [],
+  reducer: React.Reducer<Types.Workouts, Types.WorkoutActions>
+): [Types.Workouts, React.Dispatch<Types.WorkoutActions>] => {
+  const [state, dispatch] = useReducer(
+    reducer,
     JSON.parse(localStorage.getItem(key)!) || initialValue
   );
 
@@ -14,7 +16,7 @@ const useLocalStorage = (
     key,
   ]);
 
-  return [state, setState];
+  return [state, dispatch];
 };
 
 export default useLocalStorage;

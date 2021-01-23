@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import * as Types from '../Types';
+import { WorkoutsContext } from '../contexts/Workouts.context';
 import styles from '../styles/WorkoutForms.module.css';
 import useInput from '../hooks/useInput';
 import months from '../months';
 
 interface Props {
   workout: Types.Running | Types.Cycling;
-  updateWorkout: (update: Types.Running | Types.Cycling) => void;
 }
 
-const WorkoutEditForm: React.FC<Props> = ({ workout, updateWorkout }) => {
+const WorkoutEditForm: React.FC<Props> = ({ workout }) => {
+  // Consuming contexts
+  const { dispatch } = useContext(WorkoutsContext);
+
   const { id, coords } = workout;
 
   // Workout type
@@ -64,7 +67,7 @@ const WorkoutEditForm: React.FC<Props> = ({ workout, updateWorkout }) => {
       };
 
       // updating the workout
-      updateWorkout(runningWorkout);
+      dispatch!({ type: 'UPDATE', update: runningWorkout });
     }
 
     if (workoutType === 'cycling') {
@@ -76,7 +79,7 @@ const WorkoutEditForm: React.FC<Props> = ({ workout, updateWorkout }) => {
       };
 
       // updating the workout
-      updateWorkout(cyclingWorkout);
+      dispatch!({ type: 'UPDATE', update: cyclingWorkout });
     }
   };
 

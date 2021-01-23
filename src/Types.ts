@@ -23,4 +23,13 @@ export interface Cycling extends Workout {
 
 export type Workouts = (Running | Cycling)[];
 
+export type AllWorkouts = Running | Cycling;
+
 export type WorkoutType = 'running' | 'cycling';
+
+export interface WorkoutActions {
+  type: 'ADD' | 'REMOVE' | 'REMOVE_ALL' | 'EDIT' | 'UPDATE';
+  id?: string;
+  workout?: AllWorkouts;
+  update?: AllWorkouts;
+}
