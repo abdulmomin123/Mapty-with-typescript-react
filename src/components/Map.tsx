@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -7,19 +7,20 @@ import {
   useMapEvents,
   useMap,
 } from 'react-leaflet';
+import { LatLngLiteral } from 'leaflet';
 import { FromShowingContext } from '../contexts/FormShowing.context';
 import { WorkoutsContext } from '../contexts/Workouts.context';
 import { WorkoutCoordsContext } from '../contexts/WorkoutCoords.context';
 import { MapCenterContext } from '../contexts/MapCenter.context';
 import { WorkoutClickedContext } from '../contexts/WorkoutClicked.context';
 import styles from '../styles/Map.module.css';
-import { LatLngLiteral } from 'leaflet';
 
 interface Props {
+  usersLocation: LatLngLiteral;
   zoomLevel?: number;
 }
 
-const Map: React.FC<Props> = ({ zoomLevel = 13 }) => {
+const Map: React.FC<Props> = ({ usersLocation, zoomLevel = 13 }) => {
   // Consuming contexts
   const { toggleForm } = useContext(FromShowingContext);
   const { workouts } = useContext(WorkoutsContext);
@@ -28,18 +29,6 @@ const Map: React.FC<Props> = ({ zoomLevel = 13 }) => {
   const { isWorkoutClicked, setWorkoutClicked } = useContext(
     WorkoutClickedContext
   );
-
-  // Users location
-  const [usersCoords, setUsersCoords] = useState<LatLngLiteral>();
-
-  // Gets the users position on the first load
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude: lat, longitude: lng } }) =>
-        setUsersCoords({ lat, lng }),
-      () => alert('Could not get your location :(')
-    );
-  }, [setMapCenter]);
 
   // Just the click handler on the map
   const HandleClick = () => {
@@ -74,13 +63,17 @@ const Map: React.FC<Props> = ({ zoomLevel = 13 }) => {
     return <></>;
   };
 
-  return usersCoords ? (
-    <MapContainer className={styles.Map} center={usersCoords} zoom={zoomLevel}>
+  return (
+    <MapContainer
+      className={styles.Map}
+      center={usersLocation}
+      zoom={zoomLevel}
+    >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={usersCoords}>
+      <Marker position={usersLocation}>
         <Popup>You are here.</Popup>
       </Marker>
 
@@ -101,7 +94,7 @@ const Map: React.FC<Props> = ({ zoomLevel = 13 }) => {
       {/* Moves the map to clicked workout position */}
       {isWorkoutClicked ? <MoveToMarker /> : null}
     </MapContainer>
-  ) : null;
+  );
 };
 
 export default Map;

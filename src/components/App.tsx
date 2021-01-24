@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { LatLngLiteral } from 'leaflet';
 import { FormShowingProvider } from '../contexts/FormShowing.context';
 import { WorkoutsProvider } from '../contexts/Workouts.context';
 import { WorkoutCoordsProvider } from '../contexts/WorkoutCoords.context';
@@ -10,9 +11,7 @@ import Sidebar from './Sidebar';
 
 const App = () => {
   // Checking if users device has gps
-  const [isLocationAvailable, setIsLocationAvailable] = useState<boolean>(
-    false
-  );
+  const [usersLocation, setUsersLocation] = useState<LatLngLiteral>();
 
   // Getting users coords
   useEffect(() => {
@@ -21,8 +20,8 @@ const App = () => {
     if (!geolocation) return alert('Could not get your location :(');
 
     geolocation.getCurrentPosition(
-      () => {
-        setIsLocationAvailable(true);
+      ({ coords: { latitude: lat, longitude: lng } }) => {
+        setUsersLocation({ lat, lng });
       },
       () => alert('Could not get your location :(')
     );
@@ -40,7 +39,7 @@ const App = () => {
                 <Sidebar />
 
                 {/* The map section */}
-                {isLocationAvailable && <Map />}
+                {usersLocation && <Map usersLocation={usersLocation} />}
               </WorkoutClickedProvider>
             </MapCenterProvider>
           </WorkoutCoordsProvider>
