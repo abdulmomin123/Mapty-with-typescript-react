@@ -1,22 +1,19 @@
 import React, { useContext } from 'react';
-import { LatLngLiteral } from 'leaflet';
 import { WorkoutsContext } from '../contexts/Workouts.context';
+import { MapCenterContext } from '../contexts/MapCenter.context';
+import { WorkoutClickedContext } from '../contexts/WorkoutClicked.context';
 import * as Types from '../Types';
 import styles from '../styles/Workout.module.css';
 
 interface Props {
   workout: Types.Running | Types.Cycling;
-  changeMapCenter: (newCenter: LatLngLiteral) => void;
-  setWorkoutClicked: (state: boolean) => void;
 }
 
-const Workout: React.FC<Props> = ({
-  workout,
-  changeMapCenter,
-  setWorkoutClicked,
-}) => {
+const Workout: React.FC<Props> = ({ workout }) => {
   // Consuming contexts
   const { dispatch } = useContext(WorkoutsContext);
+  const { setMapCenter } = useContext(MapCenterContext);
+  const { setWorkoutClicked } = useContext(WorkoutClickedContext);
 
   const { id, coords, type, title, distance, duration, emoji } = workout;
   const { cadence } = workout as Types.Running;
@@ -25,8 +22,8 @@ const Workout: React.FC<Props> = ({
   return (
     <li
       onClick={() => {
-        changeMapCenter(coords);
-        setWorkoutClicked(true);
+        setMapCenter!(coords);
+        setWorkoutClicked!(true);
       }}
       className={`${styles.workout} ${
         type === 'running' ? styles.running : styles.cycling

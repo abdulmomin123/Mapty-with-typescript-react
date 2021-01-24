@@ -1,21 +1,18 @@
 import React, { useContext, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import { LatLngLiteral } from 'leaflet';
 import { WorkoutsContext } from '../contexts/Workouts.context';
+import { WorkoutCoordsContext } from '../contexts/WorkoutCoords.context';
 import useInput from '../hooks/useInput';
 import { FromShowingContext } from '../contexts/FormShowing.context';
 import * as Types from '../Types';
 import styles from '../styles/WorkoutForms.module.css';
 import months from '../months';
 
-interface Props {
-  workoutCoords: LatLngLiteral;
-}
-
-const WorkoutForm: React.FC<Props> = ({ workoutCoords }) => {
+const WorkoutForm: React.FC = () => {
   // Consuming contexts
   const { isFormShowing, toggleForm } = useContext(FromShowingContext);
   const { dispatch } = useContext(WorkoutsContext);
+  const { workoutCoords } = useContext(WorkoutCoordsContext);
 
   // Workout type
   const [workoutType, setworkoutType] = useState<Types.WorkoutType>('running');
@@ -48,7 +45,7 @@ const WorkoutForm: React.FC<Props> = ({ workoutCoords }) => {
     const workout: Types.Workout = {
       id: uuid(),
       title,
-      coords: workoutCoords,
+      coords: workoutCoords!,
       distance: +distance,
       duration: +duration,
       isEditing: false,

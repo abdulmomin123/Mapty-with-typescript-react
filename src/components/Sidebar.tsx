@@ -1,22 +1,11 @@
 import React, { useContext } from 'react';
-import { LatLngLiteral } from 'leaflet';
 import { WorkoutsContext } from '../contexts/Workouts.context';
 import logo from '../img/logo.png';
 import styles from '../styles/Sidebar.module.css';
 import WorkoutList from './WorkoutList';
 import WorkoutForm from './WorkoutForm';
 
-interface Props {
-  workoutCoords: LatLngLiteral;
-  changeMapCenter: (newCenter: LatLngLiteral) => void;
-  setWorkoutClicked: (state: boolean) => void;
-}
-
-const Sidebar: React.FC<Props> = ({
-  workoutCoords,
-  changeMapCenter,
-  setWorkoutClicked,
-}) => {
+const Sidebar: React.FC = () => {
   // Consuming context
   const { workouts, dispatch } = useContext(WorkoutsContext);
 
@@ -34,12 +23,9 @@ const Sidebar: React.FC<Props> = ({
         </button>
       ) : null}
 
-      <WorkoutForm workoutCoords={workoutCoords} />
+      <WorkoutForm />
 
-      <WorkoutList
-        changeMapCenter={changeMapCenter}
-        setWorkoutClicked={setWorkoutClicked}
-      />
+      <WorkoutList />
       <p className={styles.Copyright}>© Copyright by Abdul Momin</p>
     </div>
   );
