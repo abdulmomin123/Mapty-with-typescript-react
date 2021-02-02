@@ -10,7 +10,7 @@ import Map from './Map';
 import Sidebar from './Sidebar';
 
 const App = () => {
-  // Checking if users device has gps
+  // Checking if users location is available
   const [usersLocation, setUsersLocation] = useState<LatLngLiteral>();
 
   // Getting users coords
